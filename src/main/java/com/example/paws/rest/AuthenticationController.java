@@ -22,38 +22,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest signUpRequest) {
-        try {
             JwtAuthenticationResponse response = authenticationService.signup(signUpRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (UserAlreadyExistsException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                    JwtAuthenticationResponse.builder()
-                            .message(ex.getMessage())
-                            .token(null)  // Or a different handling mechanism
-                            .build()
-            );
-        }
     }
 
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest signInRequest) {
-        try {
             JwtAuthenticationResponse response = authenticationService.signin(signInRequest);
             return ResponseEntity.ok(response);
-        } catch (InvalidCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    JwtAuthenticationResponse.builder()
-                            .message(ex.getMessage())
-                            .token(null)  // Or a different handling mechanism
-                            .build()
-            );
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    JwtAuthenticationResponse.builder()
-                            .message(ex.getMessage())
-                            .token(null)  // Or a different handling mechanism
-                            .build()
-            );
-        }
     }
 }

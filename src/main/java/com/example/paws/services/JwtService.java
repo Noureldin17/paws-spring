@@ -2,6 +2,7 @@ package com.example.paws.services;
 
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -25,7 +26,7 @@ public class JwtService {
     @Value("${token.exprirationms}")
     String jwtExpiration;
 
-    public String extractUsername(String token){return extractClaim(token, Claims::getSubject);}
+    public String extractUsername(String token) throws ExpiredJwtException {return extractClaim(token, Claims::getSubject);}
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);

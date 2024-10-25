@@ -44,7 +44,7 @@ public class AuthenticationService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (Exception e) {
-            throw new InvalidCredentialsException("Invalid email or password.");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         var user = userRepository.findByEmail(request.getEmail())

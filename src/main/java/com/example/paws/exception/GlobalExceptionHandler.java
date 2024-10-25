@@ -1,11 +1,17 @@
-package com.example.paws.rest;
+package com.example.paws.exception;
 
-import com.example.paws.exception.InvalidCredentialsException;
-import com.example.paws.exception.UserAlreadyExistsException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.file.AccessDeniedException;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,18 +34,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
-    // Inner class for structured error response
-    public static class ErrorResponse {
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class ErrorResponse{
         private String code;
         private String message;
         private int status;
 
-        public ErrorResponse(String code, String message, int status) {
-            this.code = code;
-            this.message = message;
-            this.status = status;
-        }
-
-        // Getters and Setters (optional)
     }
 }
