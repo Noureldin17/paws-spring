@@ -14,24 +14,24 @@ import java.time.LocalDateTime;
 @Table(name = "adoption_requests")
 public class AdoptionRequest {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
 
     @ManyToOne
-    @JoinColumn(name = "listing_id", nullable = false)
+    @JoinColumn(name = "listing_id")
     private AdoptionListing adoptionListing;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User requester;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime requestDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private RequestStatus status = RequestStatus.PENDING;
-
-    @Column(name = "request_date", nullable = false)
-    private LocalDateTime requestDate = LocalDateTime.now();
+    private RequestStatus status;
 
     public enum RequestStatus {
         PENDING, APPROVED, REJECTED

@@ -1,5 +1,6 @@
 package com.example.paws.config;
 
+import com.example.paws.entities.Role;
 import com.example.paws.filters.JwtAuthenticationFilter;
 import com.example.paws.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -43,13 +49,31 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/api/v1/signup","/api/v1/signin").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/pet-types").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/pet-types").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/pet-types").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/categories").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/categories").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/adoption").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

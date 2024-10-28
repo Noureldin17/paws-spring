@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 
 @Data
@@ -18,16 +19,23 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "pet_type_id")
+    private PetType petType;
+
+    @Column(name = "stock_quantity")
+    private Integer stockQuantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Image> images;
 }

@@ -1,31 +1,29 @@
 package com.example.paws.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(name = "images")
+public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderItemId;
+    private Long imageId;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @Lob
+    private byte[] data;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer quantity;
-
-    private Double price;
+    @ManyToOne
+    @JoinColumn(name = "listing_id")
+    private AdoptionListing adoptionListing;
 }

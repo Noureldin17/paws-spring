@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +23,30 @@ public class AdoptionListing {
     private Long listingId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User owner;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "pet_name", nullable = false)
-    private String petName;
-
-    @Column(name = "pet_type", nullable = false)  // New column
     private String petType;
 
-    @Column(name = "breed")
     private String breed;
 
-    @OneToMany(mappedBy = "adoptionListing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdoptionRequest> adoptionRequests = new ArrayList<>();
+    private Integer age;
 
+    private String description;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime listedDate;
+
+    @Enumerated(EnumType.STRING)
+    private ListingStatus status;
+
+    @OneToMany(mappedBy = "adoptionListing", cascade = CascadeType.ALL)
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "adoptionListing", cascade = CascadeType.ALL)
+    private List<AdoptionRequest> adoptionRequests;
+
+    public enum ListingStatus {
+        AVAILABLE, PENDING, ADOPTED
+    }
 }
