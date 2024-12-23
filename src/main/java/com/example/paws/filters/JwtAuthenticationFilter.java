@@ -48,6 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
+            request.setAttribute("userEmail", userEmail);
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             handleAuthError(response, "INVALID_TOKEN", e.getMessage(), HttpServletResponse.SC_UNAUTHORIZED);

@@ -1,11 +1,8 @@
 package com.example.paws.config;
 
-import com.example.paws.entities.Role;
 import com.example.paws.filters.JwtAuthenticationFilter;
 import com.example.paws.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -51,7 +48,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedHeaders(List.of("*"));
@@ -68,12 +65,19 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/api/v1/signup","/api/v1/signin").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/pet-types").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/pet-types").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/pet-types").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/pet-types").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/categories").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/categories").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/categories").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/categories").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/products").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/products").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/adoption").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/adoption").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/adoption-request").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/adoption-request").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

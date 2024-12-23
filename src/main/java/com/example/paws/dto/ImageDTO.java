@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequest {
-    String firstName;
-    String lastName;
-    String email;
-    String password;
+public class ImageDTO {
+
+    private Long imageId;
+
+    private byte[] data;
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest, Long> {
     List<AdoptionRequest> findByAdoptionListing_ListingId(Long listingId);
+    boolean existsAdoptionRequestByAdoptionListing_ListingIdAndUser_UserId(Long listingId, Long userId);
 }

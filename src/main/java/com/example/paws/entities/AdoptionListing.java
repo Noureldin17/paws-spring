@@ -26,7 +26,9 @@ public class AdoptionListing {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String petType;
+    @ManyToOne
+    @JoinColumn(name = "pet_type_id")
+    private PetType petType;
 
     private String breed;
 
@@ -47,6 +49,6 @@ public class AdoptionListing {
     private List<AdoptionRequest> adoptionRequests;
 
     public enum ListingStatus {
-        AVAILABLE, PENDING, ADOPTED
+        AVAILABLE, ADOPTED
     }
 }

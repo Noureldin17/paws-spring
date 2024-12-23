@@ -1,7 +1,9 @@
 package com.example.paws.services;
 
 import com.example.paws.dao.OrderItemRepository;
+import com.example.paws.dto.OrderItemDTO;
 import com.example.paws.entities.OrderItem;
+import com.example.paws.mappers.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +13,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
+    private final Mapper mapper;
 
-    public List<OrderItem> getAllOrderItems() {
-        return orderItemRepository.findAll();
+    public List<OrderItemDTO> getAllOrderItems() {
+        return mapper.mapToOrderItemsDto(orderItemRepository.findAll());
     }
 
-    public OrderItem getOrderItemById(Long id) {
-        return orderItemRepository.findById(id).orElse(null);
+    public OrderItemDTO getOrderItemById(Long id) {
+        return mapper.mapToOrderItemDto(orderItemRepository.findById(id).orElse(null));
     }
 
-    public OrderItem saveOrderItem(OrderItem orderItem) {
-        return orderItemRepository.save(orderItem);
+    public OrderItemDTO saveOrderItem(OrderItem orderItem) {
+        return mapper.mapToOrderItemDto(orderItemRepository.save(orderItem));
     }
 }

@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "adoption_requests")
+@Table(name = "adoption_requests", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"adoption_listing_id", "user_id"})
+})
 public class AdoptionRequest {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

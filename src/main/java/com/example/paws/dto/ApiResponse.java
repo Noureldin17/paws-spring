@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequest {
-    String firstName;
-    String lastName;
-    String email;
-    String password;
+@AllArgsConstructor
+public class ApiResponse<T> {
+
+    private String status;
+
+    private String message;
+
+    private T response;
+
 }

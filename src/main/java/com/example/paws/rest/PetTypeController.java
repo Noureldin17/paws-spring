@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/pet-types")
@@ -37,7 +36,6 @@ public class PetTypeController {
 
     @GetMapping
     public ResponseEntity<List<PetType>> getAllPetTypes() {
-        System.out.println("GET PET TYPES");
         return ResponseEntity.ok(petTypeService.getAllPetTypes());
     }
 }

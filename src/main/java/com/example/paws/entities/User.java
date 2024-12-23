@@ -22,6 +22,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -30,6 +36,18 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AdoptionRequest> adoptionRequests;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AdoptionListing> adoptionListings;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Image profileImage;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
