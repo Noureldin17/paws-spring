@@ -1,5 +1,6 @@
 package com.example.paws.rest;
 
+import com.example.paws.dto.ApiResponse;
 import com.example.paws.dto.UserProfileDTO;
 import com.example.paws.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +18,18 @@ public class UserProfileController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserProfileDTO> getUserProfile(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<UserProfileDTO>> getUserProfile(HttpServletRequest request) {
         String userEmail = (String) request.getAttribute("userEmail");
 
         if (userEmail == null) {
             return ResponseEntity.badRequest().build();
         }
         UserProfileDTO userProfile = userService.getUserProfileInfo(userEmail);
-        return ResponseEntity.ok(userProfile);
+        ApiResponse<UserProfileDTO> response = ApiResponse.<UserProfileDTO>builder()
+                .status("SUCCESS")
+                .message("")
+                .response(userProfile)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

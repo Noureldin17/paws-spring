@@ -48,6 +48,73 @@ public class AdoptionRequestService {
         return mapper.mapRequestToRequestDto(savedRequest);
     }
 
+    public void approveRequest(long requestId, String userEmail) {
+        User user = userService.getUserByEmail(userEmail);
+
+        Optional<AdoptionRequest> requestOpt = adoptionRequestRepository.findById(requestId);
+        if (requestOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Adoption request with ID " + requestId + " not found.");
+        }
+
+        AdoptionRequest request = requestOpt.get();
+        AdoptionListing listing = request.getAdoptionListing();
+
+        // Check if the user owns the listing
+        if (!listing.getUser().getUserId().equals(user.getUserId())) {
+            throw new InvalidRequestException("You are not authorized to approve requests for this listing.");
+        }
+
+        if (!"PENDING".equalsIgnoreCase(request.getStatus().name())) {
+            throw new InvalidRequestException("Adoption request with ID " + requestId + " cannot be approved as it is not in PENDING status.");
+        }
+
+        if (!"AVAILABLE".equalsIgnoreCase(listing.getStatus().name())) {
+            throw new InvalidRequestException("Adoption listing with ID " + listing.getListingId() + " is no longer available.");
+        }
+
+        // Approve the current request
+        request.setStatus(AdoptionRequest.RequestStatus.APPROVED);
+        adoptionRequestRepository.save(request);
+
+        // Reject other pending requests for the same listing
+        List<AdoptionRequest> otherRequests = adoptionRequestRepository.findByAdoptionListing_ListingId(listing.getListingId());
+        for (AdoptionRequest otherRequest : otherRequests) {
+            if (otherRequest.getRequestId() != requestId && "PENDING".equalsIgnoreCase(otherRequest.getStatus().name())) {
+                otherRequest.setStatus(AdoptionRequest.RequestStatus.REJECTED);
+                adoptionRequestRepository.save(otherRequest);
+            }
+        }
+
+        // Update the listing status to ADOPTED
+        listing.setStatus(AdoptionListing.ListingStatus.ADOPTED);
+        adoptionListingRepository.save(listing);
+    }
+
+    public void rejectRequest(long requestId, String userEmail) {
+        User user = userService.getUserByEmail(userEmail);
+
+        Optional<AdoptionRequest> requestOpt = adoptionRequestRepository.findById(requestId);
+        if (requestOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Adoption request with ID " + requestId + " not found.");
+        }
+
+        AdoptionRequest request = requestOpt.get();
+        AdoptionListing listing = request.getAdoptionListing();
+
+        // Check if the user owns the listing
+        if (!listing.getUser().getUserId().equals(user.getUserId())) {
+            throw new InvalidRequestException("You are not authorized to reject requests for this listing.");
+        }
+
+        if (!"PENDING".equalsIgnoreCase(request.getStatus().name())) {
+            throw new InvalidRequestException("Adoption request with ID " + requestId + " cannot be rejected as it is not in PENDING status.");
+        }
+
+        // Reject the current request
+        request.setStatus(AdoptionRequest.RequestStatus.REJECTED);
+        adoptionRequestRepository.save(request);
+    }
+
 
     public List<AdoptionRequestDTO> getRequestsByListingId(Long listingId) {
         return mapper.mapRequestsToRequestsDto(adoptionRequestRepository.findByAdoptionListing_ListingId(listingId));

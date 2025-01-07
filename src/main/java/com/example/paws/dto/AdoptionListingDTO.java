@@ -18,6 +18,8 @@ public class AdoptionListingDTO {
 
     private Long listingId;
 
+    private String petName;
+
     private UserDTO user;
 
     private PetType petType;
@@ -34,5 +36,5 @@ public class AdoptionListingDTO {
 
     private List<ImageDTO> images;
 
-    private List<AdoptionRequestDTO> adoptionRequests;
+//    private List<AdoptionRequestDTO> adoptionRequests;
 }

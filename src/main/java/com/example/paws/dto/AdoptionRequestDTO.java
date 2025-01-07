@@ -22,4 +22,6 @@ public class AdoptionRequestDTO {
     private LocalDateTime requestDate;
 
     private AdoptionRequest.RequestStatus status;
+
+    private AdoptionListingDTO adoptionListing;
 }

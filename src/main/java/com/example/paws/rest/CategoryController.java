@@ -1,5 +1,6 @@
 package com.example.paws.rest;
 
+import com.example.paws.dto.ApiResponse;
 import com.example.paws.entities.Category;
 import com.example.paws.exception.InvalidCredentialsException;
 import com.example.paws.services.CategoryService;
@@ -17,14 +18,24 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+    public ResponseEntity<ApiResponse<Category>> addCategory(@RequestBody Category category) {
         Category createdCategory = categoryService.addCategory(category);
-        return ResponseEntity.ok(createdCategory);
+        ApiResponse<Category> response = ApiResponse.<Category>builder()
+                .status("SUCCESS")
+                .message("")
+                .response(createdCategory)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<ApiResponse<List<Category>>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        ApiResponse<List<Category>> response = ApiResponse.<List<Category>>builder()
+                .status("SUCCESS")
+                .message("")
+                .response(categories)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

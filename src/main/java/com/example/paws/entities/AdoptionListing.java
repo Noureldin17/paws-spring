@@ -32,6 +32,8 @@ public class AdoptionListing {
 
     private String breed;
 
+    private String petName;
+
     private Integer age;
 
     private String description;

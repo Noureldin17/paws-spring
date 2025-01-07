@@ -31,6 +31,29 @@ public class AdoptionRequestController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/approve")
+    public ResponseEntity<ApiResponse<String>> approveRequest(@RequestParam long requestId,HttpServletRequest request){
+        String userEmail = (String) request.getAttribute("userEmail");
+        adoptionRequestService.approveRequest(requestId,userEmail);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .status("SUCCESS")
+                .message("Request Approved!")
+                .response("SUCCESS")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/reject")
+    public ResponseEntity<ApiResponse<String>> rejectRequest(@RequestParam long requestId,HttpServletRequest request){
+        String userEmail = (String) request.getAttribute("userEmail");
+        adoptionRequestService.rejectRequest(requestId,userEmail);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .status("SUCCESS")
+                .message("Request Rejected!")
+                .response("SUCCESS")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/listing/{listingId}")
     public ResponseEntity<ApiResponse<List<AdoptionRequestDTO>>> getRequestsForListing(@PathVariable Long listingId) {
         List<AdoptionRequestDTO> requests = adoptionRequestService.getRequestsByListingId(listingId);

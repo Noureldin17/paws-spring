@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItemDTO {
 
-    private Product product;
+    private ProductDTO product;
 
     private Integer quantity;
 

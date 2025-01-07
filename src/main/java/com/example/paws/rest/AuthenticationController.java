@@ -1,11 +1,7 @@
 package com.example.paws.rest;
 
-import com.example.paws.dto.JwtAuthenticationResponse;
-import com.example.paws.dto.SignInRequest;
-import com.example.paws.dto.SignUpRequest;
+import com.example.paws.dto.*;
 import com.example.paws.services.AuthenticationService;
-import com.example.paws.exception.UserAlreadyExistsException;
-import com.example.paws.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +17,24 @@ public class AuthenticationController {
     final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest signUpRequest) {
-            JwtAuthenticationResponse response = authenticationService.signup(signUpRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<ApiResponse<JwtAuthenticationResponse>> signup(@RequestBody SignUpRequest signUpRequest) {
+        JwtAuthenticationResponse authResponse = authenticationService.signup(signUpRequest);
+        ApiResponse<JwtAuthenticationResponse> response = ApiResponse.<JwtAuthenticationResponse>builder()
+                .status("SUCCESS")
+                .message("")
+                .response(authResponse)
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest signInRequest) {
-            JwtAuthenticationResponse response = authenticationService.signin(signInRequest);
-            return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<JwtAuthenticationResponse>> signin(@RequestBody SignInRequest signInRequest) {
+        JwtAuthenticationResponse authResponse = authenticationService.signin(signInRequest);
+        ApiResponse<JwtAuthenticationResponse> response = ApiResponse.<JwtAuthenticationResponse>builder()
+                .status("SUCCESS")
+                .message("")
+                .response(authResponse)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

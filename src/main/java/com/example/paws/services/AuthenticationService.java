@@ -8,6 +8,7 @@ import com.example.paws.entities.Role;
 import com.example.paws.entities.User;
 import com.example.paws.exception.InvalidCredentialsException;
 import com.example.paws.exception.UserAlreadyExistsException;
+import com.example.paws.mappers.Mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final Mapper mapper;
 
     public JwtAuthenticationResponse signup(SignUpRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -38,7 +40,7 @@ public class AuthenticationService {
 
         user = userService.save(user);
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().message("Registration Success!").token(jwt).build();
+        return JwtAuthenticationResponse.builder().user(mapper.mapUserToUserDTO(user)).message("Registration Success!").token(jwt).build();
     }
 
     public JwtAuthenticationResponse signin(SignInRequest request) {
@@ -52,6 +54,6 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().message("Authentication Success!").token(jwt).build();
+        return JwtAuthenticationResponse.builder().user(mapper.mapUserToUserDTO(user)).message("Authentication Success!").token(jwt).build();
     }
 }

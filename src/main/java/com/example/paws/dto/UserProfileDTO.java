@@ -21,9 +21,9 @@ public class UserProfileDTO {
 
     private List<OrderDTO> orders;
 
-//    private List<AdoptionRequestDTO> adoptionRequests;
+    private List<AdoptionRequestDTO> adoptionRequests;
 
-    private List<AdoptionListingDTO> adoptionListings;
+    private List<UserProfileListingDTO> adoptionListings;
 
     private ImageDTO profileImage;
 }

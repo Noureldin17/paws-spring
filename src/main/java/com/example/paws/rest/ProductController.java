@@ -43,10 +43,10 @@ public class ProductController {
 
     @GetMapping("/filter")
     public ResponseEntity<ApiResponse<Page<ProductDTO>>> filterProducts(
-            @RequestParam(defaultValue = "0") int size,
-            @RequestParam(defaultValue = "10") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) String petType,
+            @RequestParam(required = false) List<String> petType,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice) {
 
