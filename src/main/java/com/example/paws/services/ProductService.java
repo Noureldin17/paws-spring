@@ -3,6 +3,7 @@ package com.example.paws.services;
 import com.example.paws.dao.ProductRepository;
 import com.example.paws.dto.ProductDTO;
 import com.example.paws.entities.*;
+import com.example.paws.exception.ResourceNotFoundException;
 import com.example.paws.mappers.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -86,5 +87,57 @@ public class ProductService {
 
         return productPage.map(mapper::mapProductToProductDto);
     }
+
+    public Product updateProduct(Long productId, ProductDTO productDTO, List<MultipartFile> imageFiles) {
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with ID " + productId + " not found."));
+
+        if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
+            existingProduct.setName(productDTO.getName());
+        } else {
+            throw new IllegalArgumentException("Product name cannot be null or empty.");
+        }
+
+        if (productDTO.getDescription() != null) {
+            existingProduct.setDescription(productDTO.getDescription());
+        }
+
+        if (productDTO.getPrice() != null && productDTO.getPrice() > 0) {
+            existingProduct.setPrice(productDTO.getPrice());
+        } else {
+            throw new IllegalArgumentException("Price must be a positive value.");
+        }
+
+        if (productDTO.getCategory() != null) {
+            existingProduct.setCategory(productDTO.getCategory());
+        }
+
+        if (productDTO.getPetType() != null) {
+            existingProduct.setPetType(productDTO.getPetType());
+        }
+
+        if (productDTO.getStockQuantity() != null && productDTO.getStockQuantity() >= 0) {
+            existingProduct.setStockQuantity(productDTO.getStockQuantity());
+        } else {
+            throw new IllegalArgumentException("Stock quantity must be a non-negative value.");
+        }
+
+        List<Image> images = new ArrayList<>();
+        for (MultipartFile file : imageFiles) {
+            Image image = new Image();
+            try {
+                image.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to convert image file", e);
+            }
+            image.setProduct(existingProduct);
+            images.add(image);
+        }
+
+        existingProduct.setImages(images);
+
+        return productRepository.save(existingProduct);
+    }
+
 
 }

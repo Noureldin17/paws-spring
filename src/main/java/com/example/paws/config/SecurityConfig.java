@@ -49,7 +49,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setMaxAge(3600L);
@@ -77,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/products").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/adoption").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/adoption").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/adoption").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/adoption-request").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/v1/adoption-request").authenticated()
                         .anyRequest().authenticated()

@@ -19,8 +19,8 @@ public class AdoptionRequestController {
 
     private final AdoptionRequestService adoptionRequestService;
 
-    @PostMapping("/create/{listingId}")
-    public ResponseEntity<ApiResponse<Object>> createRequest(@PathVariable Long listingId, HttpServletRequest request) {
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<Object>> createRequest(@RequestParam long listingId, HttpServletRequest request) {
         String userEmail = (String) request.getAttribute("userEmail");
         AdoptionRequestDTO createdRequest = adoptionRequestService.createRequest(listingId, userEmail);
         ApiResponse<Object> response = ApiResponse.builder()

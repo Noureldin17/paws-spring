@@ -67,7 +67,21 @@ public class ProductController {
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .status("SUCCESS")
                 .message("A new product has been added with ID: " + savedProduct.getProductId() + " & Name: " + savedProduct.getName())
-                .response(null)
+                .response("SUCCESS")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ApiResponse<String>> editProduct(
+            @PathVariable Long productId,
+            @RequestPart ProductDTO product,
+            @RequestPart(required = false) List<MultipartFile> imageFiles) {
+        Product updatedProduct = productService.updateProduct(productId, product, imageFiles);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .status("SUCCESS")
+                .message("Product with ID: " + updatedProduct.getProductId() + " has been updated successfully.")
+                .response("SUCCESS")
                 .build();
         return ResponseEntity.ok(response);
     }

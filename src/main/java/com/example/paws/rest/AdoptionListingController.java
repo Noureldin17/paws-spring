@@ -58,8 +58,8 @@ public class AdoptionListingController {
         return ResponseEntity.ok(listing);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteListing(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<Void> deleteListing(@RequestParam Long id) {
         adoptionListingService.deleteListing(id);
         return ResponseEntity.noContent().build();
     }

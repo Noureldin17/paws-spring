@@ -18,6 +18,7 @@ public interface Mapper {
     UserProfileDTO toUserProfileDTO(User user);
 
     @Named("mapUserToUserDTO")
+    @Mapping(source = "role", target = "role")
     UserDTO mapUserToUserDTO(User user);
     @Named("mapOrdersToOrdersDto")
     @Mapping(source = "orderItems", target = "orderItems", qualifiedByName = "mapToOrderItemsDto")

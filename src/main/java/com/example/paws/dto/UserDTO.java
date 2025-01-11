@@ -1,5 +1,6 @@
 package com.example.paws.dto;
 
+import com.example.paws.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class UserDTO {
     private String lastName;
 
     private String email;
+
+    private Role role;
 
     private ImageDTO profileImage;
 }
