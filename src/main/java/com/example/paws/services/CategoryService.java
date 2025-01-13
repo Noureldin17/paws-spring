@@ -2,6 +2,7 @@ package com.example.paws.services;
 
 import com.example.paws.dao.CategoryRepository;
 import com.example.paws.entities.Category;
+import com.example.paws.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,9 @@ public class CategoryService {
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 }

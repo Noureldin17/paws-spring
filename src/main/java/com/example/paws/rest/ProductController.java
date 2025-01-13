@@ -6,6 +6,7 @@ import com.example.paws.entities.Product;
 import com.example.paws.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,6 +85,12 @@ public class ProductController {
                 .response("SUCCESS")
                 .build();
         return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(
+            @PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
     }
 
 }
