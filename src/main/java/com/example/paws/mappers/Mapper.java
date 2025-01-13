@@ -43,6 +43,7 @@ public interface Mapper {
     @Mapping(source = "images", target = "images", qualifiedByName = "mapImageToImageDTO")
     @Mapping(source = "adoptionRequests", target = "adoptionRequests", qualifiedByName = "mapRequestToUserProfileRequestDto")
     @Mapping(source = "user", target = "user", qualifiedByName = "mapUserToUserDTO")
+    @Mapping(source = "petName", target = "petName")
     UserProfileListingDTO mapListingToUserProfileListingDto(AdoptionListing adoptionListing);
 
     @Named("mapRequestToUserProfileRequestDto")

@@ -19,6 +19,8 @@ public class UserProfileListingDTO {
 
     private Long listingId;
 
+    private String petName;
+
     private UserDTO user;
 
     private PetType petType;
